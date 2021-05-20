@@ -1,0 +1,19 @@
+.custom-container {
+    margin: 0 70px 0 70px;
+    background-color: #282c30;
+    color: white;
+}
+
+header {
+    margin: auto;
+}
+
+section {
+    margin: 0 auto;
+}
+
+.custom-card {
+    width: 50%;
+    margin: 15px auto;
+    background-color: #474b4f !important;
+}
