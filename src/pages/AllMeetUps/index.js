@@ -1,38 +1,43 @@
-import React from "react";
+import { React, useState, useEffect } from "react";
 import Navbar from "../../component/layouts/Navbar";
 import MeetupList from "../../component/meetups/MeetupList";
 import "./style.css";
 
-const DUMMY_DATA = [
-  {
-    id: "m1",
-    title: "Cyberpunk 2077 #1",
-    image: "https://i.ytimg.com/vi/1vd0CPs-Jpg/maxresdefault.jpg",
-    address: "Meetupstreet 5, 12345 Meetup City",
-    description:
-      "This is a first, amazing meetup which you definitely should not miss. It will be a lot of fun!",
-  },
-  {
-    id: "m2",
-    title: "Cyberpunk 2077 #2",
-    image:
-      "https://cdn.wccftech.com/wp-content/uploads/2020/12/Cyberpunk-2077-4K-Ultra-scaled.jpg",
-    address: "Meetupstreet 5, 12345 Meetup City",
-    description:
-      "This is a first, amazing meetup which you definitely should not miss. It will be a lot of fun!",
-  },
-  {
-    id: "m3",
-    title: "Cyberpunk 2077 #3",
-    image:
-      "https://meedios.com/wp-content/uploads/2020/09/cyberpunk-2077.jpg",
-    address: "Meetupstreet 5, 12345 Meetup City",
-    description:
-      "This is a first, amazing meetup which you definitely should not miss. It will be a lot of fun!",
-  },
-];
-
 function AllMeetUpsPage() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadedMeetup, setLoadedMeetup] = useState([]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetch("https://react-meetup-ac217-default-rtdb.firebaseio.com/meetups.json")
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        const meetups = [];
+
+        for (const key in data) {
+          const meetup = {
+            id: key,
+            ...data[key],
+          };
+
+          meetups.push(meetup);
+        }
+
+        setIsLoading(false);
+        setLoadedMeetup(meetups);
+      });
+  }, []);
+
+  if (isLoading) {
+    return (
+      <section>
+        <p>Loading....</p>
+      </section>
+    );
+  }
+
   return (
     <div>
       <Navbar />
@@ -41,7 +46,7 @@ function AllMeetUpsPage() {
           <h1>All Meet Up</h1>
         </header>
         <section>
-          <MeetupList data={DUMMY_DATA} />
+          <MeetupList data={loadedMeetup} />
         </section>
       </div>
     </div>
